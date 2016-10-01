@@ -34,6 +34,7 @@ db.open(function(e, d){
 
 var accounts = db.collection('accounts');
 
+
 /* login validation methods */
 
 exports.autoLogin = function(user, pass, callback)

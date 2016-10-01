@@ -1,0 +1,77 @@
+#target {
+            height: 400px;
+            width: 700px;
+            background-color: #f8f8f8;
+            margin: 50px auto 10px;
+            overflow: hidden;
+            border-radius: 5px;
+            box-shadow: 2px 2px 5px #888;
+            box-sizing: border-box;
+            display: none;
+        }
+        
+        .hover::before {
+            content: '请将excel文件拖到这里';
+            width: 100%;
+            height: 100%;
+            display: block;
+            text-align: center;
+            line-height: 400px;
+            font-size: 24px;
+            font-family: '微软雅黑';
+        }
+        
+        .grid {
+            display: block;
+            margin-top: 200px;
+            transform: translateY(-50%);
+            border: 1px solid red;
+        }
+        
+        #chart_dv {
+            /*height: 500px;*/
+            width: 700px;
+            background-color: #f8f8f8;
+            margin: 50px auto 10px;
+            border-radius: 5px;
+            box-shadow: 2px 2px 5px #888;
+            box-sizing: border-box;
+            box-sizing: border-box;
+            padding: 0;
+        }
+        
+        a {
+            width: 80px;
+            height: 35px;
+            display: block;
+            line-height: 35px;
+            background-color: #f9f9f9;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+            margin-top: 20px;
+            margin-left: 50px;
+            text-decoration: none;
+            text-align: center;
+            float: left;
+        }
+        
+        a:first-child {
+            margin-left: 282px;
+        }
+
+        .outer:after {
+            clear: both;
+            content:'';
+            display:block;
+            width: 0;height: 0;
+            visibility:hidden;
+        }
+        
+        :target {
+            display: block !important;
+        }
+        
+        a:hover {
+            background: #f3f3f3;
+            text-decoration: none;
+        }
