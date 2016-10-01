@@ -1,0 +1,36 @@
+doctype html
+html
+	head
+		title XJTU Home
+		link(rel='stylesheet', href='/vendor/bootstrap.min.css')
+		link(rel='stylesheet', href='/css/style.css')
+		link(rel='stylesheet', href='//cdnjs.cloudflare.com/ajax/libs/github-fork-ribbon-css/0.1.1/gh-fork-ribbon.min.css')
+		block link
+	body
+		nav.navbar.navbar-default.navbar-fixed-top
+			.container
+				.navbar-header
+					.navbar-brand#btn-home.btn XJTU HOME 
+				ul.nav.navbar-nav.navbar-right
+					li
+						.navbar-btn#btn-excel.btn.btn-default
+							| Edit Excel 
+						.navbar-btn#btn-account.btn.btn-default
+							| update account 
+						.navbar-btn#btn-logout.btn.btn-default
+							| Sign Out
+		include ../modals/alert
+		
+		block content
+		
+		script(src='/vendor/jquery-2.2.3.min.js')
+		script(src='/vendor/jquery.form.min.js')
+		script(src='/vendor/bootstrap.min.js')
+		script(src='/js/views/navbar.js')
+		script(src='/js/controllers/navbarController.js')
+
+		block scripts
+		
+
+
+

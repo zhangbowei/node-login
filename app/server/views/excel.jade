@@ -1,5 +1,5 @@
 
-extends layout
+extends layout/navbar
 
 block link
     link(rel='stylesheet', href='/css/excel.css')
@@ -7,23 +7,14 @@ block link
 
 block content
 
-    include navbar
-    include modals/alert
-    
     #target.hover
     .outer
-      a(href='#target') 表格
       a#export(href='javascript:void(0)') 导出excel
       a#toggle_chart_type(href='javascript:void(0)') 切换类型
     #chart_dv
       #chart
 
 block scripts
-    script(src='/vendor/jquery-2.2.3.min.js')
-    script(src='/vendor/jquery.form.min.js')
-    script(src='/vendor/bootstrap.min.js')
-    script(src='/js/views/navbar.js')
-    script(src='/js/controllers/navbarController.js')
     script(src='/vendor/controls/wijmo.min.js')
     script(src='/vendor/controls/wijmo.grid.min.js')
     script(src='/vendor/controls/wijmo.grid.detail.min.js')
