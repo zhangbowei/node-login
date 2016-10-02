@@ -6,15 +6,33 @@ block link
     link(rel='stylesheet', href='/css/wijmo.css')  
 
 block content
+    - user = typeof(udata) != 'undefined' ? udata : { }
+    input(type='hidden', value= user._id)#userId
+
+    
 
     #target.hover
+
     .outer
       a#export(href='javascript:void(0)') 导出excel
       a#toggle_chart_type(href='javascript:void(0)') 切换类型
+      
+    #excel-form-container
+        form(method="post")#excel-form
+            input(type='hidden', value="")#excel-tf
+            button(type='submit')#excel-form-btn.btn.btn-primary
+
+    
     #chart_dv
-      #chart
+        #chart
+    
+
+    
+    include modals/form-errors
+    include modals/confirm
 
 block scripts
+    script(src='/vendor/jszip.min.js')
     script(src='/vendor/controls/wijmo.min.js')
     script(src='/vendor/controls/wijmo.grid.min.js')
     script(src='/vendor/controls/wijmo.grid.detail.min.js')
@@ -22,4 +40,5 @@ block scripts
     script(src='/vendor/controls/wijmo.xlsx.min.js')
     script(src='/vendor/controls/wijmo.chart.min.js')
     script(src='/js/views/excel.js')
-    script(src='/vendor/jszip.min.js')
+    script(src='/js/controllers/excelController.js')
+    script(src='/js/form-validators/excelValidator.js')

@@ -1,58 +1,56 @@
-(function () {
+$(document).ready(function () {
     var dataGrid = null,
         gridDiv = null,
         workbook = null,
         chart = null;
 
-    window.addEventListener('load', function () {
-        window.location.href = window.location.href.split('#')[0] + '#target';
-        gridDiv = document.createElement('div');
-        gridDiv.classList.add('grid');
+    gridDiv = document.createElement('div');
+    gridDiv.classList.add('grid');
 
 
-        var target = document.querySelector('#target');
+    var target = document.querySelector('#target');
 
-        target.addEventListener('dragenter', function (e) {
-            e.preventDefault();
-            this.classList.remove('hover');
+    target.addEventListener('dragenter', function (e) {
+        e.preventDefault();
+        this.classList.remove('hover');
 
-        });
-        target.addEventListener('dragleave', function (e) {
-            e.preventDefault();
-            this.classList.add('hover');
-        });
-        target.addEventListener('dragover', function (e) {
-            e.preventDefault();
-            this.classList.remove('hover');
-        });
+    });
+    target.addEventListener('dragleave', function (e) {
+        e.preventDefault();
+        this.classList.add('hover');
+    });
+    target.addEventListener('dragover', function (e) {
+        e.preventDefault();
+        this.classList.remove('hover');
+    });
 
-        target.addEventListener('drop', function (e) {
-            e.preventDefault();
-            dataGrid = new wijmo.grid.FlexGrid(gridDiv);
-            chart = new wijmo.chart.FlexChart('#chart');
+    target.addEventListener('drop', function (e) {
+        e.preventDefault();
+        dataGrid = new wijmo.grid.FlexGrid(gridDiv);
+        chart = new wijmo.chart.FlexChart('#chart');
 
-            handleDrop(e.dataTransfer.files[0]);
-            this.appendChild(gridDiv);
-            dataGrid.onCellEditEnded = function (e) {
-                this.refresh(false);
-            }
-        });
+        handleDrop(e.dataTransfer.files[0]);
+        setExcelArray(e.dataTransfer.files[0]);
 
-        var btnExport = document.querySelector('#export');
-        btnExport.addEventListener('click', function () {
-            if (dataGrid) {
-                exportExcel('file');
-            }
-            return false;
-        })
-        document.querySelector('#toggle_chart_type').addEventListener('click', function () {
-            if (chart) {
-                chart.chartType = chart.chartType === wijmo.chart.ChartType.Column ?
-                    wijmo.chart.ChartType.Area :
-                    wijmo.chart.ChartType.Column;
-            }
-        })
+        this.appendChild(gridDiv);
+        dataGrid.onCellEditEnded = function (e) {
+            this.refresh(false);
+        }
+    });
 
+    var btnExport = document.querySelector('#export');
+    btnExport.addEventListener('click', function () {
+        if (dataGrid) {
+            exportExcel('file');
+        }
+        return false;
+    });
+    document.querySelector('#toggle_chart_type').addEventListener('click', function () {
+        if (chart) {
+            chart.chartType = chart.chartType === wijmo.chart.ChartType.Column ?
+                wijmo.chart.ChartType.Area :
+                wijmo.chart.ChartType.Column;
+        }
     });
 
     var handleDrop = function (file) {
@@ -78,6 +76,23 @@
             };
             reader.readAsDataURL(file);
         }
+    }
+
+    var setExcelArray = function (file) {
+        var reader;
+        var workbook;
+
+        if (file) {
+            reader = new FileReader;
+            reader.onload = function (e) {
+                workbook = new wijmo.xlsx.Workbook();
+                workbook.load(reader.result);
+                $('#excel-tf')[0].value = JSON.stringify(getCollectionView(workbook));
+            }
+
+            reader.readAsDataURL(file);
+        }
+
     }
 
     var getCollectionView = function (workbook) {
@@ -111,4 +126,31 @@
             { includeColumnHeaders: true }, fileName);
 
     }
-})(window);
+
+    var ec = new ExcelController();
+    var ev = new ExcelValidator();
+
+    $('#excel-form').ajaxForm({
+        beforeSubmit: function (formData, jqForm, options) {
+            if (ev.validateForm() == false) {
+                return false;
+            } else {
+                formData.push({ name: 'user', value: $('#userId').val() });
+                formData.push({ name: 'excel', value: $('#excel-tf').val() });
+                return true;
+            }
+        },
+        success: function (responseText, status, xhr, $form) {
+            if (status == 'success') ec.onUpdateSuccess();
+        },
+        error: function (e) {
+            if (e.responseText == 'error-updating-excel') {
+                ev.showInvalidExcel();
+            }
+        }
+    });
+
+    $('#excel-form-btn').html('Submit');
+
+
+});

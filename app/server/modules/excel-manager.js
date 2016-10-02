@@ -1,6 +1,7 @@
 
 var MongoDB 	= require('mongodb').Db;
 var Server 		= require('mongodb').Server;
+var moment 		= require('moment');
 
 /*
 	ESTABLISH DATABASE CONNECTION
@@ -32,7 +33,7 @@ db.open(function(e, d){
 
 var excels = db.collection('excels');
 
-exports.getAllExcels = function(callback)
+exports.getAllRecords = function(callback)
 {
 	excels.find().toArray(
 		function(e, res) {

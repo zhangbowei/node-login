@@ -1,0 +1,18 @@
+extends layout/pure
+
+block content
+	div.container(style='margin:20px')
+		table.table.table-bordered.table-striped
+			thead
+				tr
+					th(style='width:40px') #
+					th(style='width:180px') Name
+					th(style='width:200px') Excel
+					th Excel Created
+			tbody
+			- for (var i = 0; i < exls.length; i++)
+				tr
+					td= i+1
+					td= exls[i].user
+					td= exls[i].excel
+					td= exls[i].date

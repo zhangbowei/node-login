@@ -176,7 +176,8 @@ module.exports = function (app) {
 			res.redirect('/');
 		} else {
 			res.render('excel', {
-				title: 'Excel Panel'
+				title: 'Excel Panel',
+				udata: req.session.user
 			});
 		}
 
