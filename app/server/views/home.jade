@@ -1,7 +1,36 @@
-
 extends layout/navbar
+
+block link
+    link(rel='stylesheet', href='/css/home.css')  
+
 
 block content
 
+    header
+            h1
+                span
+                span 
+                span 
+    #videoContainer
+        .overlay
+            .button
+        #video
+            video(src='http://zs.xjtu.edu.cn/_mediafile/bkszsw/2016/06/09/1k0z84aobq.mp4')
+        #controls
+            .playButton
+                .playPause
+            .ProgressContainer
+                .timer.intialTime 00:00
+                .progressBar
+                    .progress
+                .time 00:00
+                .timer.fullTime 00:00
+            .volume
+                .icon
+                .intensityBar
+                    .intensity
+            .scale
+                .icon
+
 block scripts
-	
+    script(src='/js/views/home.js')

@@ -4,9 +4,36 @@ $(document).ready(function () {
         workbook = null,
         chart = null;
 
+    $('#statistic').hide();
+
     gridDiv = document.createElement('div');
     gridDiv.classList.add('grid');
+    
+    dataGrid = new wijmo.grid.FlexGrid(gridDiv);
+    chart = new wijmo.chart.FlexChart('#chart');
 
+    var parseFile = function(e) {
+        e.preventDefault();
+
+        var file = e.target.files ? e.target.files[0] : e.dataTransfer.files[0];
+        var fileName = file.name.substring(file.name.lastIndexOf(".")+1).toLowerCase();
+        if(fileName !="xls" && fileName !="xlsx"){
+          alert("请选择excel格式文件上传！");
+          return;
+        }
+        
+        //onload belong to async, so every times need use file, has to read it again.
+        //or not file maybe NULL.
+        notifyFileName(file);
+        showFileStatistic(file);
+        handleDrop(file);
+        setExcelArray(file);
+
+        target.appendChild(gridDiv);
+        dataGrid.onCellEditEnded = function (e) {
+            target.refresh(false);
+        }
+    };
 
     var target = document.querySelector('#target');
 
@@ -23,28 +50,27 @@ $(document).ready(function () {
         e.preventDefault();
         this.classList.remove('hover');
     });
+    //Need behind the definition of "parseFile" 
+    target.addEventListener('drop', parseFile);
 
-    target.addEventListener('drop', function (e) {
+    fileInput = document.createElement('input');
+    fileInput.type = "file";
+    fileInput.onchange = function(e) {
+        parseFile(e);
+    }
+
+    $('#choose').click(function(e){
         e.preventDefault();
-        dataGrid = new wijmo.grid.FlexGrid(gridDiv);
-        chart = new wijmo.chart.FlexChart('#chart');
-
-        handleDrop(e.dataTransfer.files[0]);
-        setExcelArray(e.dataTransfer.files[0]);
-
-        this.appendChild(gridDiv);
-        dataGrid.onCellEditEnded = function (e) {
-            this.refresh(false);
-        }
+        fileInput.click(e);
     });
 
-    var btnExport = document.querySelector('#export');
-    btnExport.addEventListener('click', function () {
+    document.querySelector('#export').addEventListener('click', function () {
         if (dataGrid) {
             exportExcel('file');
         }
         return false;
     });
+
     document.querySelector('#toggle_chart_type').addEventListener('click', function () {
         if (chart) {
             chart.chartType = chart.chartType === wijmo.chart.ChartType.Column ?
@@ -53,26 +79,65 @@ $(document).ready(function () {
         }
     });
 
+    var notifyFileName = function(file) {
+        var name;
+        if (file) {
+            name = file.name;
+            $('#notify').html(name + " has been chosen");
+        } else {
+            $('#notify').html("No file chosen");
+        }
+    }
+
+    var showFileStatistic = function(file) {
+        if (file) {
+            $('#statistic').show();
+        } else {
+            $('#statistic').hide();
+        }
+    };
+
+    var initChartConfigure = function(collection) {
+        var configure = {};
+        var collectionView = new wijmo.collections.CollectionView(collection);
+
+        configure.itemsSource = collectionView;
+        configure.options = { groupWidth: 15 };
+
+        var item = collection[0];
+        var nameSet, nameX, nameY=[], num;
+        nameSet = Object.keys(item);
+        nameX = (nameSet.indexOf("name")!=-1) ? "name" : nameSet.shift();
+        for (var key in nameSet) {
+            num = item[nameSet[key]];
+            if (num > 2 && num < 500) {
+                nameY.push({name: nameSet[key], binding: nameSet[key]});
+            }
+        }
+
+        configure.bindingX = nameX; 
+        configure.series = nameY;
+
+        return configure;
+    };
+
     var handleDrop = function (file) {
         var reader;
         var workbook;
         if (file) {
             reader = new FileReader;
+           
             reader.onload = function (e) {
                 workbook = new wijmo.xlsx.Workbook();
                 workbook.load(reader.result);
-                var collectionView = new wijmo.collections.CollectionView(getCollectionView(workbook));
+                var collection = getCollectionView(workbook);
+                var collectionView = new wijmo.collections.CollectionView(collection);
                 dataGrid.itemsSource = collectionView;
-                chart.initialize({
-                    itemsSource: collectionView,
-                    bindingX: 'name',
-                    options: {
-                        groupWidth: 15
-                    },
-                    series: [
-                        { name: '年龄', binding: 'age' },
-                    ]
-                });
+
+                //some bug in wijmo.js, so there init series manually
+                chart.series = [chart.series.shift()];
+
+                chart.initialize(initChartConfigure(collection));
             };
             reader.readAsDataURL(file);
         }
@@ -149,8 +214,5 @@ $(document).ready(function () {
             }
         }
     });
-
-    $('#excel-form-btn').html('Submit');
-
 
 });

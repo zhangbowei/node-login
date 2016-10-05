@@ -1,77 +1,232 @@
-/*#target {
-    height: 400px;
-    width: 700px;
-    background-color: #f8f8f8;
-    margin: 50px auto 10px;
-    overflow: hidden;
-    border-radius: 5px;
-    box-shadow: 2px 2px 5px #888;
-    box-sizing: border-box;
-    display: none;
-}*/
-
-.hover::before {
-    content: '请将excel文件拖到这里';
-    width: 100%;
-    height: 100%;
-    display: block;
-    text-align: center;
-    line-height: 400px;
-    font-size: 24px;
-    font-family: '微软雅黑';
+.card {
+  font-family: sans-serif;
+  font-size: 16px;
+  min-width: 288px;
+  margin: 80px auto auto auto;
+  width: 500px;
+  font-weight: lighter;
+  max-width: calc(100% - 32px);
+  padding: 1.5em 1em;
+  position: relative;
+  background: #FFFFFF;
+  color: #212121;
+  border-radius: 2px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.35), 0 3px 6px rgba(0, 0, 0, 0.65);
 }
 
-.grid {
-    display: block;
-    margin-top: 200px;
-    transform: translateY(-50%);
-    border: 1px solid red;
+.file-drag {
+  margin: 1em 0;
+  cursor: default;
+  background-color: #ECEFF1;
+  color: #607D8B;
+  background-image: -webkit-linear-gradient(bottom, currentColor 10px, #FFFFFF 10px), -webkit-linear-gradient(left, currentColor 10px, #FFFFFF 10px), -webkit-linear-gradient(top, currentColor 10px, #FFFFFF 10px), -webkit-linear-gradient(right, currentColor 10px, #FFFFFF 10px);
+  background-image: linear-gradient(to top, currentColor 10px, #FFFFFF 10px), linear-gradient(to right, currentColor 10px, #FFFFFF 10px), linear-gradient(to bottom, currentColor 10px, #FFFFFF 10px), linear-gradient(to left, currentColor 10px, #FFFFFF 10px);
+  background-size: 1px 20px, 20px 1px, 1px 20px, 20px 1px;
+  background-repeat: repeat-y, repeat-x, repeat-y, repeat-x;
+  -webkit-animation: background-position 1s linear infinite;
+          animation: background-position 1s linear infinite;
+  will-change: background-position;
+}
+.file-drag.hover {
+  background-color: #E8F5E9;
+  color: #4CAF50;
+}
+@-webkit-keyframes background-position {
+  from {
+    background-position: 0% 0px, 0px 100%, 100% 0px, 0px 0%;
+  }
+  to {
+    background-position: 0% 40px, 40px 100%, 100% -40px, -40px 0%;
+  }
+}
+@keyframes background-position {
+  from {
+    background-position: 0% 0px, 0px 100%, 100% 0px, 0px 0%;
+  }
+  to {
+    background-position: 0% 40px, 40px 100%, 100% -40px, -40px 0%;
+  }
+}
+.image-preview {
+  display: inline-block;
+  max-width: 60px;
+  max-height: 60px;
+  margin: 2px;
+  padding: 5px;
 }
 
-#chart_dv {
-    /*height: 500px;*/
-    width: 700px;
-    background-color: #f8f8f8;
-    margin: 50px auto 10px;
-    border-radius: 5px;
-    box-shadow: 2px 2px 5px #888;
-    box-sizing: border-box;
-    box-sizing: border-box;
-    padding: 0;
+.preview {
+  display: inline-block;
+  padding: 5px;
+  margin: 2px;
+  max-width: 200px;
+  max-height: 100px;
+  overflow: auto;
+  word-break: break-all;
+  white-space: pre-wrap;
+  background: #CFD8DC;
 }
 
-a {
-    width: 80px;
-    height: 35px;
-    display: block;
-    line-height: 35px;
-    background-color: #f9f9f9;
-    border: 1px solid #ccc;
-    border-radius: 3px;
-    margin-top: 20px;
-    margin-left: 50px;
-    text-decoration: none;
-    text-align: center;
-    float: left;
+.preview-item {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-align-content: center;
+      -ms-flex-line-pack: center;
+          align-content: center;
+  margin: 5px 0;
+  background: #CFD8DC;
+}
+.preview-item.disabled {
+  background: #F5F5F5;
+  pointer-events: none;
+}
+.preview-item.disabled .button {
+  opacity: 0.5;
 }
 
-a:first-child {
-    margin-left: 282px;
+.input {
+  position: absolute;
+  top: 0;
+  left: -10em;
+  height: 0;
+  width: 0;
+  opacity: 0;
 }
 
-.outer:after {
-    clear: both;
-    content:'';
-    display:block;
-    width: 0;height: 0;
-    visibility:hidden;
+.loader {
+  height: 60px;
+  width: 60px;
+  position: relative;
 }
 
-:target {
-    display: block !important;
+.loader-item {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  height: 10px;
+  width: 10px;
+  margin: -5px;
+  border-radius: 100%;
+  background: #90A4AE;
+  -webkit-animation: load-item .8s ease-in-out infinite;
+          animation: load-item .8s ease-in-out infinite;
+}
+.loader-item:nth-child(1) {
+  -webkit-animation-delay: 0s;
+          animation-delay: 0s;
+}
+.loader-item:nth-child(2) {
+  -webkit-animation-delay: -0.2s;
+          animation-delay: -0.2s;
+}
+.loader-item:nth-child(3) {
+  -webkit-animation-delay: -0.4s;
+          animation-delay: -0.4s;
 }
 
-a:hover {
-    background: #f3f3f3;
-    text-decoration: none;
+@-webkit-keyframes load-item {
+  from {
+    -webkit-transform: rotate(0deg) translateY(20px);
+            transform: rotate(0deg) translateY(20px);
+  }
+  to {
+    -webkit-transform: rotate(360deg) translateY(20px);
+            transform: rotate(360deg) translateY(20px);
+  }
+}
+
+@keyframes load-item {
+  from {
+    -webkit-transform: rotate(0deg) translateY(20px);
+            transform: rotate(0deg) translateY(20px);
+  }
+  to {
+    -webkit-transform: rotate(360deg) translateY(20px);
+            transform: rotate(360deg) translateY(20px);
+  }
+}
+.button {
+  font-size: .8em;
+  margin-right: .5em;
+  padding: .35em .5em;
+  color: currentColor;
+  border: 1px solid;
+  cursor: pointer;
+  background: transparent;
+  color: #607D8B;
+  white-space: nowrap;
+  font-weight: lighter;
+  text-transform: uppercase;
+}
+.button:hover, .button:focus {
+  background: #607D8B;
+  border-color: #607D8B;
+  color: #FFFFFF;
+}
+.button:active {
+  background: #708a97;
+  border-color: #708a97;
+  color: #FFFFFF;
+}
+.button:focus {
+  outline: 0;
+}
+
+.input-wrapper {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  color: #212121;
+}
+
+.file-name {
+  -webkit-box-flex: 0;
+  -webkit-flex: 0 1 auto;
+      -ms-flex: 0 1 auto;
+          flex: 0 1 auto;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.file-ext {
+  -webkit-box-flex: 1;
+  -webkit-flex: 1;
+      -ms-flex: 1;
+          flex: 1;
+}
+
+.input-cover {
+  padding: 1em;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-align-content: center;
+      -ms-flex-line-pack: center;
+          align-content: center;
+  border-radius: 2px;
+}
+
+.help-text {
+  padding: 1em;
+  display: inline-block;
+  color: #212121;
+}
+
+.spacer {
+  -webkit-box-flex: 1;
+  -webkit-flex: 1;
+      -ms-flex: 1;
+          flex: 1;
 }
