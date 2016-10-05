@@ -7,7 +7,9 @@ block link
 
 block content
     - user = typeof(udata) != 'undefined' ? udata : { }
+    - excel = typeof(excel) != 'undefined' ? excel : "" 
     input(type='hidden', value= user._id)#userId
+    input(type='hidden', value= excel)#excel
 
     .card
         div

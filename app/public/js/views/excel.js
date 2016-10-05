@@ -1,16 +1,22 @@
 $(document).ready(function () {
-    var dataGrid = null,
-        gridDiv = null,
-        workbook = null,
-        chart = null;
+// init file(all excels) for admin.
+    var initAdminFile = function() {
+        var str;
+        str = $("#excel").val();
 
-    $('#statistic').hide();
+        if (!str)
+            return;
+        target.appendChild(gridDiv);
+        $('#statistic').show();
+        var collection = JSON.parse(str);
+        var collectionView = new wijmo.collections.CollectionView(collection);
+        dataGrid.itemsSource = collectionView;
 
-    gridDiv = document.createElement('div');
-    gridDiv.classList.add('grid');
-    
-    dataGrid = new wijmo.grid.FlexGrid(gridDiv);
-    chart = new wijmo.chart.FlexChart('#chart');
+        //some bug in wijmo.js, so there init series manually
+        chart.series = [chart.series.shift()];
+
+        chart.initialize(initChartConfigure(collection));
+    }
 
     var parseFile = function(e) {
         e.preventDefault();
@@ -29,61 +35,7 @@ $(document).ready(function () {
         handleDrop(file);
 
         target.appendChild(gridDiv);
-        dataGrid.onCellEditEnded = function (e) {
-            target.refresh(false);
-        }
     };
-
-    var target = document.querySelector('#target');
-
-    target.addEventListener('dragenter', function (e) {
-        e.preventDefault();
-        this.classList.remove('hover');
-
-    });
-    target.addEventListener('dragleave', function (e) {
-        e.preventDefault();
-        this.classList.add('hover');
-    });
-    target.addEventListener('dragover', function (e) {
-        e.preventDefault();
-        this.classList.remove('hover');
-    });
-    //Need behind the definition of "parseFile" 
-    target.addEventListener('drop', parseFile);
-
-    fileInput = document.createElement('input');
-    fileInput.type = "file";
-    fileInput.onchange = function(e) {
-        parseFile(e);
-    }
-
-    $('#choose').click(function(e){
-        e.preventDefault();
-        fileInput.click(e);
-    });
-
-    document.querySelector('#export').addEventListener('click', function () {
-        if (dataGrid) {
-            exportExcel('file');
-        }
-        return false;
-    });
-
-    document.querySelector('#excel-form-btn').addEventListener('click', function () {
-        if (dataGrid) {
-            $('#excel-tf')[0].value = JSON.stringify(dataGrid.collectionView.items);
-        }
-        return false;
-    });
-
-    document.querySelector('#toggle_chart_type').addEventListener('click', function () {
-        if (chart) {
-            chart.chartType = chart.chartType === wijmo.chart.ChartType.Column ?
-                wijmo.chart.ChartType.Area :
-                wijmo.chart.ChartType.Column;
-        }
-    });
 
     var notifyFileName = function(file) {
         var name;
@@ -181,6 +133,76 @@ $(document).ready(function () {
 
     }
 
+//use functions set DOM.
+    var dataGrid = null,
+        gridDiv = null,
+        workbook = null,
+        chart = null;
+
+    $('#statistic').hide();
+
+    gridDiv = document.createElement('div');
+    gridDiv.classList.add('grid');
+    
+    dataGrid = new wijmo.grid.FlexGrid(gridDiv);
+    chart = new wijmo.chart.FlexChart('#chart');
+
+    var target = document.querySelector('#target');
+    
+    dataGrid.onCellEditEnded = function (e) {
+        target.refresh(false);
+    }
+    
+    target.addEventListener('dragenter', function (e) {
+        e.preventDefault();
+        this.classList.remove('hover');
+
+    });
+    target.addEventListener('dragleave', function (e) {
+        e.preventDefault();
+        this.classList.add('hover');
+    });
+    target.addEventListener('dragover', function (e) {
+        e.preventDefault();
+        this.classList.remove('hover');
+    });
+    //Need behind the definition of "parseFile" 
+    target.addEventListener('drop', parseFile);
+
+    fileInput = document.createElement('input');
+    fileInput.type = "file";
+    fileInput.onchange = function(e) {
+        parseFile(e);
+    }
+
+    $('#choose').click(function(e){
+        e.preventDefault();
+        fileInput.click(e);
+    });
+
+    document.querySelector('#export').addEventListener('click', function () {
+        if (dataGrid) {
+            exportExcel('file');
+        }
+        return false;
+    });
+
+    document.querySelector('#excel-form-btn').addEventListener('click', function () {
+        if (dataGrid) {
+            $('#excel-tf')[0].value = JSON.stringify(dataGrid.collectionView.items);
+        }
+        return false;
+    });
+
+    document.querySelector('#toggle_chart_type').addEventListener('click', function () {
+        if (chart) {
+            chart.chartType = chart.chartType === wijmo.chart.ChartType.Column ?
+                wijmo.chart.ChartType.Area :
+                wijmo.chart.ChartType.Column;
+        }
+    });
+
+
     var ec = new ExcelController();
     var ev = new ExcelValidator();
 
@@ -203,5 +225,7 @@ $(document).ready(function () {
             }
         }
     });
+
+    initAdminFile();
 
 });

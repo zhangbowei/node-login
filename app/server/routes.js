@@ -172,13 +172,30 @@ module.exports = function (app) {
 
 	// add & update excels
 	app.get('/excel', function (req, res) {
+		var data = {};
+
 		if (req.session.user == null) {
 			res.redirect('/');
 		} else {
-			res.render('excel', {
-				title: 'Excel Panel',
-				udata: req.session.user
-			});
+			data.title = 'Excel Panel';
+			data.udata = req.session.user;
+			if (req.session.user.user == "test") {
+				EXM.getAllRecords(function(e, record) {
+					var excel, excels = [];
+					if (record.length != 0) {
+						for (var i in record) {
+							excel = record[i].excel.replace(/\[(.*)\]/, function(match, key) {
+								return key;	
+							});
+							excels.push(excel);
+						}
+						data.excel = "[" + excels.join(",") + "]";
+					}
+					res.render('excel', data);
+				});
+			} else {
+				res.render('excel', data);
+			}
 		}
 
 	});
@@ -211,6 +228,12 @@ module.exports = function (app) {
 	app.get('/printExcel', function(req, res) {
 		EXM.getAllRecords(function(e, excels) {
 			res.render('printExcel', { title: 'Excel List', exls: excels});	
+		});
+	});
+
+	app.get('/resetExcel', function(req, res) {
+		EXM.delAllRecords(function() {
+			res.redirect('/printExcel');
 		});
 	});
 

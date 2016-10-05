@@ -53,3 +53,9 @@ exports.updateExcel = function(newData, callback) {
 		}
 	});
 }
+
+exports.delAllRecords = function(callback)
+{
+	excels.remove({}, callback); 
+}
+
