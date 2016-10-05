@@ -27,7 +27,6 @@ $(document).ready(function () {
         notifyFileName(file);
         showFileStatistic(file);
         handleDrop(file);
-        setExcelArray(file);
 
         target.appendChild(gridDiv);
         dataGrid.onCellEditEnded = function (e) {
@@ -67,6 +66,13 @@ $(document).ready(function () {
     document.querySelector('#export').addEventListener('click', function () {
         if (dataGrid) {
             exportExcel('file');
+        }
+        return false;
+    });
+
+    document.querySelector('#excel-form-btn').addEventListener('click', function () {
+        if (dataGrid) {
+            $('#excel-tf')[0].value = JSON.stringify(dataGrid.collectionView.items);
         }
         return false;
     });
@@ -141,23 +147,6 @@ $(document).ready(function () {
             };
             reader.readAsDataURL(file);
         }
-    }
-
-    var setExcelArray = function (file) {
-        var reader;
-        var workbook;
-
-        if (file) {
-            reader = new FileReader;
-            reader.onload = function (e) {
-                workbook = new wijmo.xlsx.Workbook();
-                workbook.load(reader.result);
-                $('#excel-tf')[0].value = JSON.stringify(getCollectionView(workbook));
-            }
-
-            reader.readAsDataURL(file);
-        }
-
     }
 
     var getCollectionView = function (workbook) {
