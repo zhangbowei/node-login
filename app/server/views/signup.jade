@@ -3,8 +3,10 @@ extends layout/pure
 
 block content
 
-	include account
+	include modals/add-user
 	include modals/alert
+	include modals/form-errors
+	include modals/confirm
 
 block scripts
 	script(src='/vendor/jquery-2.2.3.min.js')

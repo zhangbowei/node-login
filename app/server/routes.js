@@ -179,7 +179,7 @@ module.exports = function (app) {
 		} else {
 			data.title = 'Excel Panel';
 			data.udata = req.session.user;
-			if (req.session.user.user == "test") {
+			if (req.session.user.user == "admin") {
 				EXM.getAllRecords(function(e, record) {
 					var excel, excels = [];
 					if (record.length != 0) {
