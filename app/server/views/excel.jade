@@ -25,12 +25,13 @@ block content
                 input(type='hidden', value="")#excel-tf
                 button(type='submit')#excel-form-btn.button UPLOAD File
                 button(type='button').button#export export file
-            #statistic 
-                .previews
-                    .preview-item
-                        pre.preview Statistical chart:
-                        .file-name.spacer Intelligent PARM recognition
-                        button.button#toggle_chart_type switch type
+            
+            .previews
+                .preview-item
+                    pre.preview Statistical chart:
+                    .file-name.spacer Intelligent PARM recognition
+                    button.button#toggle_chart_type switch type
+            #statistic(type='hidden') 
                 .previews
                     #chart 
       

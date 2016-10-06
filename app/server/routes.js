@@ -170,6 +170,18 @@ module.exports = function (app) {
 		})
 	});
 
+	app.post('/delete', function (req, res) {
+		AM.deleteAccount(req.body.id, function (e, obj) {
+			if (!e) {
+				res.clearCookie('user');
+				res.clearCookie('pass');
+				req.session.destroy(function (e) { res.status(200).send('ok'); });
+			} else {
+				res.status(400).send('record not found');
+			}
+		});
+	});
+
 	// add & update excels
 	app.get('/excel', function (req, res) {
 		var data = {};
@@ -217,6 +229,13 @@ module.exports = function (app) {
 		}
 	});
 
+	app.get('*', function (req, res, next) { 
+		if (req.session.user.user == "admin") {
+			next();
+			return;
+		}
+		res.render('404', { title: 'Page Not Found' }); 
+	});
 	// view & delete accounts //
 
 	app.get('/print', function (req, res) {
@@ -234,18 +253,6 @@ module.exports = function (app) {
 	app.get('/resetExcel', function(req, res) {
 		EXM.delAllRecords(function() {
 			res.redirect('/printExcel');
-		});
-	});
-
-	app.post('/delete', function (req, res) {
-		AM.deleteAccount(req.body.id, function (e, obj) {
-			if (!e) {
-				res.clearCookie('user');
-				res.clearCookie('pass');
-				req.session.destroy(function (e) { res.status(200).send('ok'); });
-			} else {
-				res.status(400).send('record not found');
-			}
 		});
 	});
 
