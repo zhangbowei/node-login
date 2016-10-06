@@ -231,7 +231,7 @@ module.exports = function (app) {
 	});
 
 	app.get('*', function (req, res, next) { 
-		if (req.session.user.user == "admin") {
+		if (req.session.user && req.session.user.user == "admin") {
 			next();
 			return;
 		}
