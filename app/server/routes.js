@@ -199,7 +199,8 @@ module.exports = function (app) {
 							excel = record[i].excel.replace(/\[(.*)\]/, function(match, key) {
 								return key;	
 							});
-							excels.push(excel);
+							if (excel)
+								excels.push(excel);
 						}
 						data.excel = "[" + excels.join(",") + "]";
 					}
