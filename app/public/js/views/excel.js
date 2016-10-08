@@ -65,7 +65,7 @@ $(document).ready(function () {
         var item = collection[0];
         var nameSet, nameX, nameY=[], num;
         nameSet = Object.keys(item);
-        nameX = (nameSet.indexOf("name")!=-1) ? "name" : nameSet.shift();
+        nameX = (nameSet.indexOf("name")!=-1) ? "name" : ((nameSet.indexOf("姓名")!=-1) ? "姓名" : nameSet.shift());
         for (var key in nameSet) {
             num = item[nameSet[key]];
             if (num > 2 && num < 500) {
@@ -116,7 +116,7 @@ $(document).ready(function () {
                         header.push(cell.value);
                     }
                     else {
-                        rowArray[header[j]] = cell.value;
+                        rowArray[header[j]] = cell ? (cell.value || " ") : " ";
                     }
                 }
                 if (i !== 0) {
