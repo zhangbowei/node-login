@@ -38,67 +38,8 @@ module.exports = function (app) {
 			}
 		});
 	});
-
-	app.get('/home', function (req, res) {
-		if (req.session.user == null) {
-			// if user is not logged-in redirect back to login page //
-			res.redirect('/');
-		} else {
-			res.render('home', {
-				title: 'Control Panel',
-				udata: req.session.user
-			});
-		}
-	});
-	// logged-in user homepage //
-
-	app.get('/account', function (req, res) {
-		if (req.session.user == null) {
-			// if user is not logged-in redirect back to login page //
-			res.redirect('/');
-		} else {
-			res.render('account', {
-				title: 'Control Panel',
-				countries: CT,
-				udata: req.session.user
-			});
-		}
-	});
-
-	app.post('/account', function (req, res) {
-		if (req.session.user == null) {
-			res.redirect('/');
-		} else {
-			AM.updateAccount({
-				id: req.session.user._id,
-				name: req.body['name'],
-				email: req.body['email'],
-				pass: req.body['pass'],
-				country: req.body['country']
-			}, function (e, o) {
-				if (e) {
-					res.status(400).send('error-updating-account');
-				} else {
-					req.session.user = o;
-					// update the user's login cookies if they exists //
-					if (req.cookies.user != undefined && req.cookies.pass != undefined) {
-						res.cookie('user', o.user, { maxAge: 900000 });
-						res.cookie('pass', o.pass, { maxAge: 900000 });
-					}
-					res.status(200).send('ok');
-				}
-			});
-		}
-	});
-
-	app.post('/logout', function (req, res) {
-		res.clearCookie('user');
-		res.clearCookie('pass');
-		req.session.destroy(function (e) { res.status(200).send('ok'); });
-	})
-
+	
 	// creating new accounts //
-
 	app.get('/signup', function (req, res) {
 		res.render('signup', { title: 'Signup', countries: CT });
 	});
@@ -120,7 +61,6 @@ module.exports = function (app) {
 	});
 
 	// password reset //
-
 	app.post('/lost-password', function (req, res) {
 		// look up the user's account via their email //
 		AM.getAccountByEmail(req.body['email'], function (o) {
@@ -140,6 +80,7 @@ module.exports = function (app) {
 			}
 		});
 	});
+
 
 	app.get('/reset-password', function (req, res) {
 		var email = req.query["e"];
@@ -170,6 +111,59 @@ module.exports = function (app) {
 		})
 	});
 
+	//Guard unLogin User
+	app.all('*', function (req, res, next) {
+		if (req.session.user == null) {
+			// if user is not logged-in redirect back to login page //
+			res.redirect('/');
+		} else {
+			next();
+		}
+	});
+
+	app.get('/home', function (req, res) {
+		res.render('home', {
+			title: 'Control Panel',
+			udata: req.session.user
+		});
+	});
+
+	app.get('/account', function (req, res) {
+		res.render('account', {
+			title: 'Control Panel',
+			countries: CT,
+			udata: req.session.user
+		});
+	});
+
+	app.post('/account', function (req, res) {
+		AM.updateAccount({
+			id: req.session.user._id,
+			name: req.body['name'],
+			email: req.body['email'],
+			pass: req.body['pass'],
+			country: req.body['country']
+		}, function (e, o) {
+			if (e) {
+				res.status(400).send('error-updating-account');
+			} else {
+				req.session.user = o;
+				// update the user's login cookies if they exists //
+				if (req.cookies.user != undefined && req.cookies.pass != undefined) {
+					res.cookie('user', o.user, { maxAge: 900000 });
+					res.cookie('pass', o.pass, { maxAge: 900000 });
+				}
+				res.status(200).send('ok');
+			}
+		});
+	});
+
+	app.post('/logout', function (req, res) {
+		res.clearCookie('user');
+		res.clearCookie('pass');
+		req.session.destroy(function (e) { res.status(200).send('ok'); });
+	})
+
 	app.post('/delete', function (req, res) {
 		AM.deleteAccount(req.session.user._id, function (e, obj) {
 			if (!e) {
@@ -186,83 +180,78 @@ module.exports = function (app) {
 	app.get('/excel', function (req, res) {
 		var data = {};
 
-		if (req.session.user == null) {
-			res.redirect('/');
-		} else {
-			data.title = 'Excel Panel';
-			data.udata = req.session.user;
-			if (req.session.user.user == "admin") {
-				EXM.getAllRecords(function(e, record) {
-					var excel, excels = [];
-					if (record.length != 0) {
-						for (var i in record) {
-							excel = record[i].excel.replace(/\[(.*)\]/, function(match, key) {
-								return key;	
-							});
-							if (excel)
-								excels.push(excel);
+		data.title = 'Excel Panel';
+		data.udata = req.session.user;
+		if (req.session.user.user == "admin") {
+			EXM.getAllRecords(function (e, record) {
+				var excel, excels = [];
+				if (record.length != 0) {
+					for (var i in record) {
+						excel = record[i].excel.replace(/\[(.*)\]/, function (match, key) {
+							return key;
+						});
+						if (excel) {
+							excels.push(excel);
 						}
-						data.excel = "[" + excels.join(",") + "]";
 					}
-					res.render('excel', data);
-				});
-			} else {
+					data.excel = "[" + excels.join(",") + "]";
+				}
 				res.render('excel', data);
-			}
+			});
+		} else {
+			res.render('excel', data);
 		}
 
 	});
 
 	app.post('/excel', function (req, res) {
-		if (req.session.user == null) {
-			res.redirect('/');
-		} else {
-			EXM.updateExcel({
-				user: req.session.user.user,
-				excel: req.body['excel']
-			}, function (e, o) {
-				if (e) {
-					res.status(400).send('error-updating-excel');
-				} else {
-					res.status(200).send('ok');
-				}
-			});
-		}
+		EXM.updateExcel({
+			user: req.session.user.user,
+			excel: req.body['excel']
+		}, function (e, o) {
+			if (e) {
+				res.status(400).send('error-updating-excel');
+			} else {
+				res.status(200).send('ok');
+			}
+		});
 	});
 
-	app.get('*', function (req, res, next) { 
+	//Guard Normal User
+	app.all('*', function (req, res, next) {
 		if (req.session.user && req.session.user.user == "admin") {
 			next();
-			return;
+		} else {
+			res.render('404', { title: 'Page Not Found' });
 		}
-		res.render('404', { title: 'Page Not Found' }); 
 	});
-	// view & delete accounts //
 
-	app.get('/print', function (req, res) {
+	app.get('/printAccount', function (req, res) {
 		AM.getAllRecords(function (e, accounts) {
 			res.render('print', { title: 'Account List', accts: accounts });
 		})
 	});
 
-	app.get('/printExcel', function(req, res) {
-		EXM.getAllRecords(function(e, excels) {
-			res.render('printExcel', { title: 'Excel List', exls: excels});	
-		});
-	});
-
-	app.get('/resetExcel', function(req, res) {
-		EXM.delAllRecords(function() {
-			res.redirect('/printExcel');
-		});
-	});
-
-	app.get('/reset', function (req, res) {
+	app.get('/resetAccount', function (req, res) {
 		AM.delAllRecords(function () {
 			res.redirect('/print');
 		});
 	});
 
-	app.get('*', function (req, res) { res.render('404', { title: 'Page Not Found' }); });
+	app.get('/printExcel', function (req, res) {
+		EXM.getAllRecords(function (e, excels) {
+			res.render('printExcel', { title: 'Excel List', exls: excels });
+		});
+	});
+
+	app.get('/resetExcel', function (req, res) {
+		EXM.delAllRecords(function () {
+			res.redirect('/printExcel');
+		});
+	});
+
+	app.all('*', function (req, res) { 
+		res.render('404', { title: 'Page Not Found' }); 
+	});
 
 };

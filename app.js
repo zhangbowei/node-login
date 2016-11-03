@@ -1,8 +1,8 @@
 
 /**
-	* Node.js Login Boilerplate
-	* More Info : http://kitchen.braitsch.io/building-a-login-system-in-node-js-and-mongodb/
-	* Copyright (c) 2013-2016 Stephen Braitsch
+	* Node.js Login 
+	* More Info : https://github.com/zhangbowei/node-login.git
+	* Copyright (c) 2016 zhangbowei
 **/
 
 var http = require('http');
@@ -38,7 +38,7 @@ if (app.get('env') == 'live'){
 }
 
 app.use(session({
-	secret: 'faeb4453e5d14fe6f6d04637f78077c76c73d1b4',
+	secret: 'faeb4453e5d14fe6f6iid04637f78077c76c73d1b4',
 	proxy: true,
 	resave: true,
 	saveUninitialized: true,

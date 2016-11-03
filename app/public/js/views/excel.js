@@ -1,6 +1,6 @@
 $(document).ready(function () {
 // init file(all excels) for admin.
-    var initAdminFile = function() {
+    var initExcel = function() {
         var str;
         str = $("#excel").val();
 
@@ -23,8 +23,8 @@ $(document).ready(function () {
 
         var file = e.target.files ? e.target.files[0] : e.dataTransfer.files[0];
         var fileName = file.name.substring(file.name.lastIndexOf(".")+1).toLowerCase();
-        if(fileName !="xls" && fileName !="xlsx"){
-          alert("请选择excel格式文件上传！");
+        if(fileName !="xlsx"){
+          alert(`请选择.xlsx格式文件上传！(你当前的文件格式为${fileName})`);
           return;
         }
         
@@ -65,7 +65,7 @@ $(document).ready(function () {
         var item = collection[0];
         var nameSet, nameX, nameY=[], num;
         nameSet = Object.keys(item);
-        nameX = (nameSet.indexOf("name")!=-1) ? "name" : ((nameSet.indexOf("姓名")!=-1) ? "姓名" : nameSet.shift());
+        nameX = (nameSet.indexOf("name")!=-1) ? "name" : ((nameSet.indexOf("姓名")!=-1) ? "姓名" : nameSet[0]);
         for (var key in nameSet) {
             num = item[nameSet[key]];
             if (num > 2 && num < 500) {
@@ -226,6 +226,6 @@ $(document).ready(function () {
         }
     });
 
-    initAdminFile();
+    initExcel();
 
 });
