@@ -5,7 +5,6 @@
 	* Copyright (c) 2016 zhangbowei
 **/
 
-var http = require('http');
 var express = require('express');
 var session = require('express-session');
 var bodyParser = require('body-parser');
@@ -48,6 +47,6 @@ app.use(session({
 
 require('./app/server/routes')(app);
 
-http.createServer(app).listen(app.get('port'), function(){
+app.listen(app.get('port'), function(){
 	console.log('Express server listening on port ' + app.get('port'));
 });

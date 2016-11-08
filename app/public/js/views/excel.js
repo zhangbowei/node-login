@@ -65,7 +65,7 @@ $(document).ready(function () {
         var item = collection[0];
         var nameSet, nameX, nameY=[], num;
         nameSet = Object.keys(item);
-        nameX = (nameSet.indexOf("name")!=-1) ? "name" : ((nameSet.indexOf("姓名")!=-1) ? "姓名" : nameSet[0]);
+        nameX = (nameSet.indexOf("Name")!=-1) ? "Name" : ((nameSet.indexOf("姓名")!=-1) ? "姓名" : nameSet[0]);
         for (var key in nameSet) {
             num = item[nameSet[key]];
             if (num > 2 && num < 500) {

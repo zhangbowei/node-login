@@ -8,6 +8,7 @@ function NavBarController()
 	$('#btn-logout').click(function(){ that.attemptLogout(); });
 	$('#btn-excel').click(function(){ window.location.href = '/excel';});
 	$('#btn-account').click(function(){ window.location.href = '/account';});
+	$('#btn-reservation').click(function(){ window.location.href = '/reservation';});
 
 	this.attemptLogout = function()
 	{

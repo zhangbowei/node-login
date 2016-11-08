@@ -1,0 +1,251 @@
+@font-face {
+  font-family: "Avenir";
+  src: local("Avenir"), url("https://s3-us-west-2.amazonaws.com/s.cdpn.io/273445/Avenir.woff") format("woff");
+  font-weight: 400;
+  font-style: normal;
+}
+html {
+  box-sizing: border-box;
+  min-width: 320px;
+}
+*,
+*:before,
+*:after {
+  box-sizing: inherit;
+}
+a {
+  color: inherit;
+  text-decoration: none;
+}
+img {
+  vertical-align: middle;
+  max-width: 100%;
+}
+ul,
+ol,
+dl,
+dd {
+  margin: 0;
+  padding: 0;
+}
+ul {
+  list-style-type: none;
+}
+ul,
+ol {
+  list-style-position: inside;
+}
+textarea {
+  max-width: 100%;
+}
+var {
+  font-style: normal;
+}
+h2 {
+  font-weight: 100;
+}
+.clearfix:before,
+.clearfix:after {
+  content: " ";
+  display: table;
+}
+.clearfix:after {
+  clear: both;
+}
+.pull-left {
+  float: left;
+}
+.pull-right {
+  float: right;
+}
+.text-overflow {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.text-center {
+  text-align: center;
+}
+.text-primary {
+  color: #00a86b;
+}
+.text-muted {
+  color: #777;
+}
+.caret {
+  display: inline-block;
+  width: 0;
+  height: 0;
+  vertical-align: middle;
+  border-top: 4px solid;
+  border-left: transparent 4px solid;
+  border-right: transparent 4px solid;
+}
+.angle {
+  display: inline-block;
+  width: 0.5em;
+  height: 0.5em;
+  vertical-align: middle;
+  border-width: 1px 1px 0 0;
+  border-style: solid;
+  -webkit-transform: rotate(45deg);
+          transform: rotate(45deg);
+}
+.angle-down {
+  -webkit-transition: .3s all ease;
+  transition: .3s all ease;
+  -webkit-transform: rotate(135deg) translate(0, 0.176775em);
+          transform: rotate(135deg) translate(0, 0.176775em);
+}
+html {
+  font: 62.5%/1.5 Avenir, Helvetica Neue, Hiragino Sans GB, Microsoft Yahei, sans-serif;
+  color: #2a2a21;
+}
+body {
+  font-size: 1.6rem;
+}
+.heighter {
+  line-height: 1.8;
+}
+.table {
+  width: 100%;
+  table-layout: fixed;
+}
+.container-sm {
+  max-width: 768px;
+  padding-left: 15px;
+  padding-right: 15px;
+  margin-left: auto;
+  margin-right: auto;
+}
+.demo-row {
+  padding: 15px;
+  margin-left: -15px;
+  margin-right: -15px;
+  border-bottom: 1px dashed #ccc;
+}
+.list-unordered {
+  list-style-type: disc;
+}
+#page {
+  max-width: 960px;
+  padding: 0 15px;
+  margin: 40px auto;
+}
+@media (max-height: 790px) {
+  #page {
+    margin-top: 0;
+  }
+}
+.page-header h1 {
+  text-align: center;
+  font-weight: 100;
+}
+.input,
+select {
+  padding: 2px 5px;
+}
+.btn {
+  padding: .2em .8em;
+  border-radius: 4px;
+  border: 1px solid #bcbcbc;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+  background-image: -webkit-linear-gradient(270deg, #ffffff 0%, #efefef 60%, #e1dfe2 100%);
+  background-image: linear-gradient(180deg, #ffffff 0%, #efefef 60%, #e1dfe2 100%);
+  background-repeat: no-repeat;
+}
+.bubble {
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  border-radius: 2px;
+  background: #fff;
+  padding: 15px;
+  width: 420px;
+  z-index: 99;
+  position: absolute;
+}
+.bubble .close {
+  position: absolute;
+  font-size: 24px;
+  line-height: 1;
+  padding: 0 5px;
+  right: 5px;
+  top: 5px;
+}
+.bubble {
+  border: 1px solid #cccccc;
+}
+.bubble .arrow,
+.bubble .arrow:after {
+  position: absolute;
+  height: 0;
+  width: 0;
+  font-size: 0;
+  border-left: transparent 10px solid;
+  border-right: transparent 10px solid;
+}
+.bubble-top .arrow,
+.bubble-bottom .arrow {
+  left: 50%;
+  margin-left: -10px;
+}
+.bubble-top .arrow:after,
+.bubble-bottom .arrow:after {
+  content: '';
+  left: -10px;
+}
+.bubble-top .arrow {
+  border-top: #cccccc 10px solid;
+  top: 100%;
+}
+.bubble-top .arrow:after {
+  border-top: #FFF  10px solid;
+  bottom: 1px;
+}
+.bubble-bottom .arrow {
+  border-bottom: #cccccc 10px solid;
+  bottom: 100%;
+}
+.bubble-bottom .arrow:after {
+  border-bottom: #FFF  10px solid;
+  top: 1px;
+}
+.form-group {
+  padding-bottom: 8px;
+}
+.form-group:before,
+.form-group:after {
+  content: " ";
+  display: table;
+}
+.form-group:after {
+  clear: both;
+}
+.form-group:before,
+.form-group:after {
+  content: " ";
+  display: table;
+}
+.form-group:after {
+  clear: both;
+}
+.form-group > label {
+  float: left;
+  width: 4em;
+  text-align: right;
+  padding-right: 5px;
+}
+.form-group > input,
+.form-group > .input-wrapper {
+  margin-left: 4em;
+  display: block;
+}
+.btn-delete {
+  margin-top: 5px;
+  display: none;
+}
+.btn-delete:hover {
+  text-decoration: underline;
+}
+.usage {
+  margin-top: 10px;
+}

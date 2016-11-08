@@ -182,8 +182,8 @@ module.exports = function (app) {
 
 		data.title = 'Excel Panel';
 		data.udata = req.session.user;
-		if (req.session.user.user == "admin") {
-			EXM.getAllRecords(function (e, record) {
+
+		var callback = function (e, record) {
 				var excel, excels = [];
 				if (record.length != 0) {
 					for (var i in record) {
@@ -197,9 +197,13 @@ module.exports = function (app) {
 					data.excel = "[" + excels.join(",") + "]";
 				}
 				res.render('excel', data);
-			});
+		};
+
+		if (req.session.user.user == "admin") {
+			EXM.getAllRecords(callback);
 		} else {
-			res.render('excel', data);
+			var a = [{ user: req.session.user.user }, { user: "admin" }];
+			EXM.getUserRecords(a, callback);		
 		}
 
 	});
@@ -214,6 +218,11 @@ module.exports = function (app) {
 			} else {
 				res.status(200).send('ok');
 			}
+		});
+	});
+
+	app.get('/reservation', function (req, res) {
+		res.render('reservation', {
 		});
 	});
 
